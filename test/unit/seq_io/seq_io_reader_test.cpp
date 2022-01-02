@@ -20,6 +20,20 @@
 #include <bio/stream/detail/fast_streambuf_iterator.hpp>
 
 #include "data.hpp"
+#include "../reader_test_template.hpp"
+
+template <>
+struct reader_test<bio::seq_io::reader<>> : public ::testing::Test
+{
+    using reader_default_t = bio::seq_io::reader<>;
+
+    auto construct(std::filesystem::path filename, auto &&... args)
+    {
+        return bio::seq_io::reader{filename, std::forward<decltype(args)>(args)...};
+    }
+};
+
+INSTANTIATE_TYPED_TEST_SUITE_P(seq_io_reader, reader_test, bio::seq_io::reader<>, );
 
 TEST(seq_io_reader, concepts)
 {
